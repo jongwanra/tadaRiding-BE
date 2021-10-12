@@ -1,8 +1,8 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 const comment = require('./comment.js');
 
-router.use('/:post-uid/comments', comment);
+router.use('/:postUid/comments', comment);
 
 router.get('/', function (req, res, next) {
   res.send('respond with a resource');

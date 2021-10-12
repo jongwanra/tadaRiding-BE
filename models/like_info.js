@@ -1,0 +1,1 @@
+// model: like_info
