@@ -1,4 +1,5 @@
 const createError = require('http-errors');
+
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -6,6 +7,16 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const app = express();
+
+//CORS
+const cors = require('cors');
+const corsOptions = {
+  //cors설정
+  origin: '*', //전체 허용
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 const indexRouter = require('./routes/index');
 
 // mongo DB connect

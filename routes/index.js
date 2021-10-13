@@ -17,7 +17,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: '타다, 라이딩. API 설계',
   },
-  host: 'localhost:3001',
+  host: 'localhost:5000',
   basePath: '/',
   securityDefinitions: {
     bearerAuth: {
