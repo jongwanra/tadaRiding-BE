@@ -6,8 +6,8 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const indexRouter = require('./routes/index');
 require('dotenv').config();
-
 const app = express();
+
 
 // mongo DB connect
 try {
@@ -17,6 +17,7 @@ try {
 } catch (error) {
   console.log('mongo connect error : ', error);
 }
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

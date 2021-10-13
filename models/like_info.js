@@ -2,17 +2,21 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 const likeSchema = new Schema({
-  postID: {
+  postUid: {
     type: String,
     required: true,
+    unique: false,
   },
-  userID: {
+  userUid: {
     type: String,
     required: true,
+    unique: false,
   },
   likeState: {
     type: Number,
     default: 0,
+    required: true,
+    unique: false,
   },
 });
 
