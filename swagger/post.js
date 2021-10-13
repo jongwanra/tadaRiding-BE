@@ -7,7 +7,7 @@
  *     tags:
  *      - Post
  *     name: 게시글 등록
- *     summary: 게시글 등록
+ *     summary: 게시글 등록(사용 가능)
  *     parameters:
  *       - name: body
  *         in: body
@@ -56,11 +56,11 @@
  *   delete:
  *     tags:
  *      - Post
- *     name: Delete Post
- *     summary: Delete Post
+ *     name: 게시글 삭제
+ *     summary: 게시글 삭제(사용 불가)
  *   put:
  *     tags:
  *      - Post
- *     name: Modify Post
- *     summary: Modify Post
+ *     name: 게시글 수정
+ *     summary: 게시글 수정(사용 불가)
  */
