@@ -17,7 +17,6 @@ const isAuth = async (req, res, next) => {
   jwt.verify(token, process.env.SECRET_KEY, async (error, decoded) => {
     // 해독하면서 에러가 발생한 경우
     // 유효기간이 끝났을 때 여기로
-    console.log(decoded); // 이 부분이 undefined
     if (error) {
       return res
         .status(401)
@@ -42,14 +41,13 @@ const isAuth = async (req, res, next) => {
 // 토큰이 있는 여부만 파악하고 user를 받기 위한 미들웨어
 const justCheckAuth = async (req, res, next) => {
   const authHeader = req.get('Authorization');
-
   if (!(authHeader && authHeader.startsWith('Bearer'))) {
     // 로그인 안했을 경우 들어와 짐.
     return next();
   }
 
   const token = authHeader.split(' ')[1];
-
+  console.log('token', token);
   jwt.verify(token, process.env.SECRET_KEY, async (error, decoded) => {
     // 해독하면서 에러가 발생한 경우
     // 유효기간이 끝났을 때 여기로

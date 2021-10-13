@@ -7,7 +7,7 @@
  *     tags:
  *      - Comment
  *     name: 댓글 추가 기능
- *     summary: 댓글 추가 기능
+ *     summary: 댓글 추가 기능(사용 가능)
  *     parameters:
  *       - name: postUid
  *         in: path
@@ -44,7 +44,7 @@
  *     tags:
  *      - Comment
  *     name: 댓글 수정 기능
- *     summary: 댓글 수정 기능
+ *     summary: 댓글 수정 기능(사용 가능)
  *     parameters:
  *       - name: postUid
  *         in: path
@@ -87,7 +87,7 @@
  *     tags:
  *      - Comment
  *     name: 댓글 삭제 기능
- *     summary: 댓글 삭제 기능
+ *     summary: 댓글 삭제 기능(사용 가능)
  *     parameters:
  *       - name: postUid
  *         in: path

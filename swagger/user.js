@@ -4,7 +4,7 @@
  *   post:
  *     tags:
  *      - User
- *     summary: 회원 등록
+ *     summary: 회원 등록(사용 가능)
  *     parameters:
  *       - name: body
  *         in: body
@@ -39,7 +39,7 @@
  *   post:
  *     tags:
  *       - User
- *     summary: 로그인 기능
+ *     summary: 로그인 기능(사용 가능)
  *     parameters:
  *       - name: body
  *         in: body
@@ -68,7 +68,7 @@
  *      - bearerAuth: []
  *     tags:
  *       - User
- *     summary: 로그아웃 기능
+ *     summary: 로그아웃 기능(사용 불가)
  *     parameters:
  *     responses:
  *       '200':

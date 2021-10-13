@@ -4,6 +4,7 @@ const comment = require('./comment.js');
 const uuid = require('uuid');
 const auth = require('../middlewares/auth');
 const Post = require('../models/post_info');
+const User = require('../models/user_info');
 
 router.use('/:postUid/comments', comment);
 
@@ -27,6 +28,7 @@ router.post('/', auth.isAuth, async (req, res) => {
     const participants = [req.user.userUid];
     const postLikeCnt = 0;
 
+    // 포스트 등록
     await Post.create({
       postUid,
       postTitle,
@@ -42,6 +44,18 @@ router.post('/', auth.isAuth, async (req, res) => {
       startTime,
       participants,
     });
+
+    const targetUser = await User.findOne(
+      { userUid: req.user.userUid },
+      { _id: false }
+    );
+    const participatedPost = targetUser.participatedPost.push(postUid);
+
+    // 유저 정보에서 참여한 게시글 목록에 내용 추가.
+    await User.updateOne(
+      { userUid: req.user.userUid },
+      { $set: { participatedPost } }
+    );
 
     return res
       .status(201)
