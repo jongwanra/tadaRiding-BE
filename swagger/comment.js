@@ -39,6 +39,8 @@
  *          description: DB 접속 에러
  * /api/posts/{postUid}/comments/{commentUid}:
  *   put:
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *      - Comment
  *     name: 댓글 수정 기능
@@ -80,6 +82,8 @@
  *       '500':
  *          description: DB 접속 에러
  *   delete:
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *      - Comment
  *     name: 댓글 삭제 기능

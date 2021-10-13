@@ -24,8 +24,12 @@ const postSchema = new Schema({
     required: true,
     unique: false,
   },
-
-  orgin: {
+  postRegister: {
+    type: String,
+    required: true,
+    unique: false,
+  },
+  origin: {
     type: String,
     required: true,
     unique: false,

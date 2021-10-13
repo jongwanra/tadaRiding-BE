@@ -2,6 +2,8 @@
  * @swagger
  * /api/posts:
  *   post:
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *      - Post
  *     name: 게시글 등록
@@ -40,7 +42,7 @@
  *             postTitle: "오늘 춘천 어때?"
  *             postDesc: "강원도 춘천이 굉장히 공기가 좋고 자전거 도로가..."
  *             limitedUserNum: 4
- *             orgin: "경기도 용인시 기흥구 구갈로"
+ *             origin: "경기도 용인시 기흥구 구갈로"
  *             destination: "경원도 춘천시"
  *             postImage: "wdqwd/dqwdqwd/dwqw/image.png"
  *             startTime: "08:00"

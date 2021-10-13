@@ -1,11 +1,13 @@
 /**
  * @swagger
- * /api/like/:postID:
+ * /api/like/{postUid}:
  *   post:
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *      - Like
- *     name: Add Data of Person Pressed Like
- *     summary: Add Data of Person Pressed Like
+ *     name: 좋아요 누름
+ *     summary: 좋아요 누름
  *     parameters:
  *       - name: body
  *         in: body
@@ -29,10 +31,12 @@
  *       '404':
  *         fail
  *   delete:
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - Like
- *     name: Delete Data of Person Canceled Like
- *     summary: Delete Data of Person Canceled Like
+ *     name: 좋아요 취소
+ *     summary: 좋아요 취소
  *     parameters:
  *       - in: query
  *         name: schoolName

@@ -1,64 +1,80 @@
 /**
  * @swagger
- * /api/user/register:
+ * /api/users/register:
  *   post:
  *     tags:
  *      - User
- *     summary: Create User
+ *     summary: 회원 등록
  *     parameters:
  *       - name: body
  *         in: body
  *         schema:
- *
- *
+ *           type: object
+ *           properties:
+ *            userId:
+ *              type: string
+ *              description: 유저 아이디
+ *            userNickname:
+ *              type: string
+ *              description: 유저 닉네임
+ *            userPassword:
+ *              type: string
+ *              description: 유저 비밀번호
+ *            userPhoneNumber:
+ *              type: string
+ *              description: 유저 핸드폰 번호
+ *           example:
+ *             userId: "jongwan"
+ *             userNickname: "jw123"
+ *             userPassword: "asdasd"
+ *             userPhoneNumber: "010-2514-0552"
  *     responses:
- *       '200':
- *         description: Register one School
+ *       '201':
+ *         description: 회원 등록 성공!
  *       '404':
- *         fail
- * /api/user/auth:
+ *         description: 경로를 찾지 못했습니다.
+ *       '408':
+ *         description: 아이디 혹은 닉네임 중복이 있을 경우 발생하는 에러
+ * /api/users/auth:
  *   post:
  *     tags:
  *       - User
- *     summary: Logs user into the system
+ *     summary: 로그인 기능
  *     parameters:
- *       - name: userNickname
+ *       - name: body
  *         in: body
- *         description: user Nickname for login
  *         required: true
  *         schema:
- *           type: string
- *       - name: userPassword
- *         in: body
- *         description: user Password for login
- *         required: true
- *         schema:
- *           type: string
+ *           type: object
+ *           properties:
+ *             userId:
+ *               type: string
+ *               description: 유저 아이디
+ *             userPassword:
+ *               type: string
+ *               description: 유저 비밀번호
+ *           example:
+ *             userId: "jongwan"
+ *             userPassword: "asdasd"
  *     responses:
- *       '200':
- *         description: successful operation
- *       '400':
- *         description: Invalid username/password supplied
+ *       '201':
+ *         description: 로그인 성공!
+ *       '401':
+ *         description: 아이디 또는 패스워드 불일치
+ *       '500':
+ *         description: 로그인 기능 중, 서버 측에서 예상치 못한 에러 발생
  *   delete:
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - User
- *     summary: Logout user into the system
+ *     summary: 로그아웃 기능
  *     parameters:
- *       - name: userNickname
- *         in: body
- *         description: user Nickname for login
- *         required: true
- *         schema:
- *           type: string
- *       - name: userPassword
- *         in: body
- *         description: user Password for login
- *         required: true
- *         schema:
- *           type: string
  *     responses:
  *       '200':
- *         description: successful operation
- *       '400':
- *         description: Invalid username/password supplied
+ *         description: 로그아웃 성공
+ *       '404':
+ *         description: 잘못된 경로로 접근
+ *       '500':
+ *         description: 예상치 못한 에러 발생
  */
