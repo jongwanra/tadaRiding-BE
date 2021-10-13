@@ -70,7 +70,7 @@ router.post('/', auth.isAuth, async (req, res) => {
 
 // 게시글 수정 API
 router.put('/:postUid', async (req, res) => {
-  const { postUid } = req.params
+  const { postUid } = req.params;
   const {
     postTitle,
     postDesc,
@@ -83,33 +83,41 @@ router.put('/:postUid', async (req, res) => {
   const post = await Post.findOne({ postUid });
 
   if (postUid === post.postUid) {
-    await Post.updateOne({ postUid: postUid }, { $set: { 
-      postTitle,
-      postDesc,
-      limitedUserNum,
-      origin,
-      destination,
-      postImage,
-      startTime,
-     } });
-     res.status(201).send({ success: true, msg: '성공적으로 게시글이 수정되었습니다.' })
+    await Post.updateOne(
+      { postUid: postUid },
+      {
+        $set: {
+          postTitle,
+          postDesc,
+          limitedUserNum,
+          origin,
+          destination,
+          postImage,
+          startTime,
+        },
+      }
+    );
+    res
+      .status(201)
+      .send({ success: true, msg: '성공적으로 게시글이 수정되었습니다.' });
   } else {
-    res.status(500).send({ success: false, msg: '게시글 수정 중 에러가 발생했습니다.' })
+    res
+      .status(500)
+      .send({ success: false, msg: '게시글 수정 중 에러가 발생했습니다.' });
   }
-})
+});
 
 // 게시글 삭제 API
 router.delete('/:postUid', async (req, res) => {
   const { postUid } = req.params;
-  const post = await Post.findOne({ postUid })
+  const post = await Post.findOne({ postUid });
 
   if (postUid === post.postUid) {
-    await Post.deleteOne({ postUid })
-    res.send({})
+    await Post.deleteOne({ postUid });
+    res.send({});
   } else {
-    res.send({})
+    res.send({});
   }
-})
-
+});
 
 module.exports = router;
