@@ -21,13 +21,13 @@ router.post('/', auth.isAuth, async (req, res) => {
       commentDate,
     });
 
-    res.status(201).send({
+    res.status(201).json({
       success: true,
       msg: '성공적으로 댓글이 등록되었습니다.',
     });
   } catch (err) {
     console.log('댓글 추가 API 에러', err);
-    res.status(500).send({
+    res.status(500).json({
       success: false,
       msg: '댓글을 추가하는데 문제가 발생했습니다.',
     });
@@ -48,10 +48,10 @@ router.put('/:commentUid', auth.isAuth, async (req, res) => {
     );
     res
       .status(201)
-      .send({ success: true, msg: '성공적으로 댓글이 수정되었습니다.' });
+      .json({ success: true, msg: '성공적으로 댓글이 수정되었습니다.' });
   } catch (error) {
     console.log('댓글 수정 기능 중 에러 발생: ', error);
-    res.status(500).send({
+    res.status(500).json({
       success: false,
       msg: '댓글을 수정하는데 문제가 발생했습니다',
     });
@@ -65,10 +65,10 @@ router.delete('/:commentUid', auth.isAuth, async (req, res) => {
     await Comment.deleteOne({ postUid, commentUid });
     res
       .status(200)
-      .send({ success: true, msg: '성공적으로 댓글이 삭제되었습니다.' });
+      .json({ success: true, msg: '성공적으로 댓글이 삭제되었습니다.' });
   } catch (error) {
     console.log('댓글 삭제 기능 중 에러 발생: ', error);
-    res.status(500).send({
+    res.status(500).json({
       result: false,
       msg: '댓글을 삭제하는데 문제가 발생했습니다.',
     });

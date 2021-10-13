@@ -70,53 +70,56 @@ router.post('/', auth.isAuth, async (req, res) => {
 
 // 게시글 수정 API
 router.put('/:postUid', async (req, res) => {
-  const { postUid } = req.params;
-  const {
-    postTitle,
-    postDesc,
-    limitedUserNum,
-    origin,
-    destination,
-    postImage,
-    startTime,
-  } = req.body;
-  const post = await Post.findOne({ postUid });
+  try {
+    const { postUid } = req.params;
+    const {
+      postTitle,
+      postDesc,
+      origin,
+      destination,
+      postState,
+      postImage,
+      startTime,
+    } = req.body;
 
-  if (postUid === post.postUid) {
     await Post.updateOne(
       { postUid: postUid },
       {
         $set: {
           postTitle,
           postDesc,
-          limitedUserNum,
           origin,
           destination,
+          postState,
           postImage,
           startTime,
         },
       }
     );
-    res
+    return res
       .status(201)
-      .send({ success: true, msg: '성공적으로 게시글이 수정되었습니다.' });
-  } else {
-    res
+      .json({ success: true, msg: '성공적으로 게시글이 수정되었습니다.' });
+  } catch (err) {
+    console.log('게시글 수정 기능 중 발생한 에러: ', err);
+    return res
       .status(500)
-      .send({ success: false, msg: '게시글 수정 중 에러가 발생했습니다.' });
+      .json({ success: false, msg: '게시글 등록 중 에러가 발생했습니다.' });
   }
 });
 
 // 게시글 삭제 API
 router.delete('/:postUid', async (req, res) => {
-  const { postUid } = req.params;
-  const post = await Post.findOne({ postUid });
-
-  if (postUid === post.postUid) {
+  try {
+    const { postUid } = req.params;
     await Post.deleteOne({ postUid });
-    res.send({});
-  } else {
-    res.send({});
+    return res
+      .status(200)
+      .json({ success: true, msg: '성공적으로 게시글이 삭제되었습니다.' });
+  } catch (err) {
+    console.log('게시글 삭제 기능 중 발생한 에러: ', err);
+    return res
+      .status(500)
+      .json({ success: false, msg: '게시글 삭제 중 에러가 발생했습니다.' });
   }
 });
 
