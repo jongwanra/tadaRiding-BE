@@ -13,7 +13,10 @@ const cors = require('cors');
 const corsOptions = {
   //cors설정
   origin: '*', //전체 허용
+  methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
+  preflightContinue: false,
   credentials: true,
+  optionsSuccessStatus: 204,
 };
 app.use(cors(corsOptions));
 

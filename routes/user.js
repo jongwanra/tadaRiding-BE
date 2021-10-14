@@ -2,8 +2,9 @@ const express = require('express');
 const uuid = require('uuid');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
+require('dotenv').config();
 const bcrypt = require('bcrypt'); // 비밀번호 암호화를 위한 내장모듈
-const setRounds = process.env.SETROUND;
+const setRounds = 10;
 const User = require('../models/user_info');
 const auth = require('../middlewares/auth');
 
@@ -35,12 +36,17 @@ router.post('/auth', async (req, res) => {
     }
 
     const userUid = checkingUser['userUid'];
+    const userNickname = checkingUser['userNickname'];
 
     // token 생성
     const token = createJwtToken(userUid);
-    res
-      .status(201)
-      .json({ success: true, token, msg: '성공적으로 로그인이되었습니다.' });
+    res.status(201).json({
+      success: true,
+      token,
+      userUid,
+      userNickname,
+      msg: '성공적으로 로그인이되었습니다.',
+    });
   } catch (err) {
     // 예측하지 못한 에러 발생(Internal Server Error)
     console.log('로그인 API에서 발생한 에러: ', err);
@@ -56,27 +62,6 @@ function createJwtToken(userUid) {
 }
 
 ////////////////////////////////////////////////////////////
-//                LOGOUT
-////////////////////////////////////////////////////////////
-
-router.delete('/auth', auth.isAuth, (req, res) => {
-  try {
-    console.log('req.user:', req.user);
-    const userUid = req.user.userUid;
-    res.clearCookie(userUid);
-    res
-      .status(200)
-      .json({ success: true, msg: '성공적으로 로그아웃이 되었습니다.' });
-  } catch (err) {
-    console.log('로그아웃 기능에서 에러 발생: ', err);
-    res.status(500).json({
-      success: false,
-      msg: 'log-out을 진행하는 데 예상치 못한 에러가 발생했습니다.',
-    });
-  }
-});
-
-////////////////////////////////////////////////////////////
 //                SIGN UP
 ////////////////////////////////////////////////////////////
 // 이메일, 닉네임 중복확인
@@ -85,8 +70,10 @@ router.post('/register', async (req, res) => {
     // 요청 받기
     const { userId, userNickname, userPhoneNumber, userPassword } = req.body;
 
+    console.log(userId, userNickname, userPhoneNumber, userPassword);
     // userId가 중복되어 있는지 확인
     let result = await checkUserId(userId);
+    console.log('1111');
     // 중복된 아이디인 경우,
     if (!result['success']) {
       return res.status(409).json(result);
@@ -94,9 +81,10 @@ router.post('/register', async (req, res) => {
 
     // userNickname이 중복되는지 확인.
     result = await checkUserNickname(userNickname);
-
+    console.log('-----------');
+    console.log(result);
     // 중복된 닉네임인 경우,
-    if (!result['success']) {
+    if (result['success'] != true) {
       return res.status(409).json(result);
     }
 
