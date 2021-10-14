@@ -63,18 +63,26 @@
  *         description: 아이디 또는 패스워드 불일치
  *       '500':
  *         description: 로그인 기능 중, 서버 측에서 예상치 못한 에러 발생
- *   delete:
+ * /api/users/{userUid}/validation:
+ *   get:
  *     security:
  *      - bearerAuth: []
  *     tags:
- *       - User
- *     summary: 로그아웃 기능(사용 불가)
+ *      - User
+ *     name: 로그인 체크 기능(사용 가능)
+ *     summary: 로그인 체크 기능(사용 가능)
  *     parameters:
+ *       - name: userUid
+ *         in: path
+ *         required: true
+ *         default: c7592940-2b75-11ec-a5f6-d11c3508bb61
+ *         schema:
+ *           type: string
  *     responses:
  *       '200':
- *         description: 로그아웃 성공
- *       '404':
- *         description: 잘못된 경로로 접근
+ *         description: 로그인 되어 있는 유저
+ *       '401':
+ *         description: 로그인 되어 있지 않은 유저
  *       '500':
- *         description: 예상치 못한 에러 발생
+ *         description: 예상하지 못한 에러
  */

@@ -9,6 +9,36 @@ const User = require('../models/user_info');
 const auth = require('../middlewares/auth');
 
 ////////////////////////////////////////////////////////////
+//                LOGIN CHECK
+////////////////////////////////////////////////////////////
+
+router.get('/:userUid/validation', auth.justCheckAuth, async (req, res) => {
+  try {
+    // 로그인 되어있지 않은 경우,
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        msg: '로그인 되어 있지 않은 유저입니다.',
+      });
+    }
+    // 로그인이 되어있을 경우
+    const userUid = req.user.userUid;
+    const userNickname = req.user.userNickname;
+
+    return res.status(200).json({
+      success: true,
+      userUid,
+      userNickname,
+      msg: '로그인 되어 있는 유저입니다.',
+    });
+  } catch (err) {
+    console.log('로그인 체크 API에서 발생한 에러: ', err);
+    res
+      .status(500)
+      .json({ success: false, msg: '예상치 못한 에러가 발생했습니다.' });
+  }
+});
+////////////////////////////////////////////////////////////
 //                LOGIN
 ////////////////////////////////////////////////////////////
 
@@ -73,7 +103,6 @@ router.post('/register', async (req, res) => {
     console.log(userId, userNickname, userPhoneNumber, userPassword);
     // userId가 중복되어 있는지 확인
     let result = await checkUserId(userId);
-    console.log('1111');
     // 중복된 아이디인 경우,
     if (!result['success']) {
       return res.status(409).json(result);
@@ -81,8 +110,6 @@ router.post('/register', async (req, res) => {
 
     // userNickname이 중복되는지 확인.
     result = await checkUserNickname(userNickname);
-    console.log('-----------');
-    console.log(result);
     // 중복된 닉네임인 경우,
     if (result['success'] != true) {
       return res.status(409).json(result);

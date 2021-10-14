@@ -26,7 +26,7 @@ const isAuth = async (req, res, next) => {
     // 존재하지 않는 회원인 경우
     const user = await User.findOne(
       { userUid: decoded.userUid },
-      { _id: false }
+      { _id: false, __v: false }
     );
     if (!user) {
       return res
@@ -58,7 +58,7 @@ const justCheckAuth = async (req, res, next) => {
     // 존재하지 않는 회원인 경우
     const user = await User.findOne(
       { userUid: decoded.userUid },
-      { _id: false }
+      { _id: false, __v: false }
     );
     if (!user) {
       return next();

@@ -4,6 +4,7 @@ const user = require('./user');
 const like = require('./like');
 const post = require('./post');
 const Post = require('../models/post_info');
+const Like = require('../models/like_info');
 const auth = require('../middlewares/auth');
 require('dotenv').config();
 
@@ -48,16 +49,27 @@ router.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 /* 게시글 불러오기 */
 router.get('/', auth.justCheckAuth, async (req, res) => {
-  console.log('게시글 불러오기에 들어와 졌다.');
   try {
     const user = req.user;
-    const posts = await Post.find({}, { _id: false });
+    const posts = await Post.find({}, { _id: false, __v: false });
+    let pressedPosts = [];
     // 유저가 로그인 한 경우
     if (user) {
-      return res.status(200).json({ success: true, posts, user });
+      const tmpPressedPosts = await Like.find(
+        { userUid: user.userUid },
+        { _id: false, userUid: false, likeState: false, __v: false }
+      );
+      // 조회한 정보가 1개 이상일 경우
+      if (tmpPressedPosts.length >= 1) {
+        // 배열형식으로 보내기 위한 코드
+        for (let data of tmpPressedPosts) {
+          pressedPosts.push(data.postUid);
+        }
+      }
+      return res.status(200).json({ success: true, posts, user, pressedPosts });
     }
     // 유저가 로그인을 안 한 경우
-    return res.status(200).json({ success: true, posts, user });
+    return res.status(200).json({ success: true, posts, user, pressedPosts });
   } catch (err) {
     console.log('게시글 불러오기 중, 예상치 못하게 발생한 에러:', err);
     return res.status(500).json({
