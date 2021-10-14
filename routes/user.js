@@ -64,7 +64,6 @@ router.post('/auth', async (req, res) => {
         msg: '아이디 또는 패스워드를 확인해주세요.',
       });
     }
-
     const userUid = checkingUser['userUid'];
     const userNickname = checkingUser['userNickname'];
 

@@ -15,6 +15,7 @@ const corsOptions = {
   origin: '*', //전체 허용
   methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
   preflightContinue: false,
+
   credentials: true,
   optionsSuccessStatus: 204,
 };
