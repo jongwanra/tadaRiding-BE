@@ -69,7 +69,7 @@ router.post('/', auth.isAuth, async (req, res) => {
 });
 
 // 게시글 수정 API
-router.put('/:postUid', async (req, res) => {
+router.put('/:postUid', auth.isAuth, async (req, res) => {
   try {
     const { postUid } = req.params;
     const {
@@ -79,6 +79,7 @@ router.put('/:postUid', async (req, res) => {
       destination,
       postState,
       postImage,
+      limitedUserNum,
       startTime,
     } = req.body;
 
@@ -92,6 +93,7 @@ router.put('/:postUid', async (req, res) => {
           destination,
           postState,
           postImage,
+          limitedUserNum,
           startTime,
         },
       }
@@ -108,7 +110,7 @@ router.put('/:postUid', async (req, res) => {
 });
 
 // 게시글 삭제 API
-router.delete('/:postUid', async (req, res) => {
+router.delete('/:postUid', auth.isAuth, async (req, res) => {
   try {
     const { postUid } = req.params;
     await Post.deleteOne({ postUid });
