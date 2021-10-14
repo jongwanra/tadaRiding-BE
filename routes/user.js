@@ -104,14 +104,14 @@ router.post('/register', async (req, res) => {
     let result = await checkUserId(userId);
     // 중복된 아이디인 경우,
     if (!result['success']) {
-      return res.status(409).json(result);
+      return res.json(result);
     }
 
     // userNickname이 중복되는지 확인.
     result = await checkUserNickname(userNickname);
     // 중복된 닉네임인 경우,
     if (result['success'] != true) {
-      return res.status(409).json(result);
+      return res.json(result);
     }
 
     // 회원가입 성공 시

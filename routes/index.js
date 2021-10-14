@@ -83,30 +83,40 @@ router.get('/', auth.justCheckAuth, async (req, res) => {
 // 게시글 상세 페이지 불러오기
 router.get('/posts/:postUid', auth.justCheckAuth, async (req, res, next) => {
   try {
+    const postUid = req.params.postUid;
     let user = [];
+    let likeState = false; 
     // 로그인한 유저인 경우
     if (req.user) {
       user = req.user;
+      const userUid = req.user.userUid;
+      // 로그인한 유저가 해당 게시글에 좋아요를 눌렀는지를 살펴보기
+      const likeData = await Like.findOne({ userUid, postUid });
+      // DB에 존재하다면, 해당 값으로 likeState 업데이트
+      if (likeData){
+        likeState = likeData.likeState;
+      }
+      
     }
 
-    const postUid = req.params.postUid;
-
     //해당 포스트의 정보를 가져온다.
-    const targetPost = await Post.findOne(
+    let targetPost = await Post.findOne(
       { postUid },
       { _id: false, __v: false }
     );
-
+    // post내부 안에 likeState추가
+    let post = targetPost.toObject();
+    post.likeState = likeState;
+    
     let comments = [];
     // 가공하기 전 코멘트들
     comments = await Comment.find(
       { postUid },
       { _id: false, __v: false, postUid: false }
     );
-
     return res.status(200).json({
       success: true,
-      post: targetPost,
+      post,
       comments,
       user,
       msg: '성공적으로 상세페이지에 접근했습니다.',

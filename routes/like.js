@@ -29,7 +29,7 @@ router.post('/:postUid', auth.isAuth, async (req, res) => {
         });
       }
     }
-    return res.status(200).json({ result: 'sucess' });
+    return res.status(201).json({ success: true });
   } catch (err) {
     console.log('좋아요 추가 기능에서 발생한 에러', err);
     return res
