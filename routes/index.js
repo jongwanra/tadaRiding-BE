@@ -5,6 +5,7 @@ const like = require('./like');
 const post = require('./post');
 const Post = require('../models/post_info');
 const Like = require('../models/like_info');
+const Comment = require('../models/comment_info');
 const auth = require('../middlewares/auth');
 require('dotenv').config();
 
@@ -80,15 +81,34 @@ router.get('/', auth.justCheckAuth, async (req, res) => {
 });
 
 // 게시글 상세 페이지 불러오기
-router.get('/posts/:postUid', async (req, res, next) => {
+router.get('/posts/:postUid', auth.justCheckAuth, async (req, res, next) => {
   try {
+    let user = [];
+    // 로그인한 유저인 경우
+    if (req.user) {
+      user = req.user;
+    }
+
     const postUid = req.params.postUid;
 
-    const targetPost = await Post.findOne({ postUid }, { _id: false });
+    //해당 포스트의 정보를 가져온다.
+    const targetPost = await Post.findOne(
+      { postUid },
+      { _id: false, __v: false }
+    );
+
+    let comments = [];
+    // 가공하기 전 코멘트들
+    comments = await Comment.find(
+      { postUid },
+      { _id: false, __v: false, postUid: false }
+    );
 
     return res.status(200).json({
       success: true,
       post: targetPost,
+      comments,
+      user,
       msg: '성공적으로 상세페이지에 접근했습니다.',
     });
   } catch (err) {

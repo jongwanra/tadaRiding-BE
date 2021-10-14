@@ -40,6 +40,8 @@
  *         description: 로그인이 안된 유저인 경우
  * /posts/{postUid}:
  *   get:
+ *     security:
+ *      - bearerAuth: []
  *     tags:
  *       - Index
  *     name: 게시글 상세 페이지
@@ -48,7 +50,7 @@
  *       - name: postUid
  *         in: path
  *         required: true
- *         default: 9d773f60-2b87-11ec-84a6-a5190298305d
+ *         default: 48ea4830-2cbc-11ec-b031-0bdc728474da
  *         schema:
  *           type: string
  *     responses:
