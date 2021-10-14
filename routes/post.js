@@ -1,15 +1,15 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router({ mergeParams: true });
-const comment = require('./comment.js');
-const uuid = require('uuid');
-const auth = require('../middlewares/auth');
-const Post = require('../models/post_info');
-const User = require('../models/user_info');
+const comment = require("./comment.js");
+const uuid = require("uuid");
+const auth = require("../middlewares/auth");
+const Post = require("../models/post_info");
+const User = require("../models/user_info");
 
-router.use('/:postUid/comments', comment);
+router.use("/:postUid/comments", comment);
 
 // 게시글 등록 API
-router.post('/', auth.isAuth, async (req, res) => {
+router.post("/", auth.isAuth, async (req, res) => {
   try {
     const {
       postTitle,
@@ -59,17 +59,17 @@ router.post('/', auth.isAuth, async (req, res) => {
 
     return res
       .status(201)
-      .json({ success: true, msg: '성공적으로 게시글이 등록되었습니다.' });
+      .json({ success: true, msg: "성공적으로 게시글이 등록되었습니다." });
   } catch (err) {
-    console.log('게시글 등록 기능 중 발생한 에러: ', err);
+    console.log("게시글 등록 기능 중 발생한 에러: ", err);
     return res
       .status(500)
-      .json({ success: false, msg: '게시글 등록 중 에러가 발생했습니다.' });
+      .json({ success: false, msg: "게시글 등록 중 에러가 발생했습니다." });
   }
 });
 
 // 게시글 수정 API
-router.put('/:postUid', async (req, res) => {
+router.put("/:postUid", async (req, res) => {
   try {
     const { postUid } = req.params;
     const {
@@ -98,28 +98,28 @@ router.put('/:postUid', async (req, res) => {
     );
     return res
       .status(201)
-      .json({ success: true, msg: '성공적으로 게시글이 수정되었습니다.' });
+      .json({ success: true, msg: "성공적으로 게시글이 수정되었습니다." });
   } catch (err) {
-    console.log('게시글 수정 기능 중 발생한 에러: ', err);
+    console.log("게시글 수정 기능 중 발생한 에러: ", err);
     return res
       .status(500)
-      .json({ success: false, msg: '게시글 등록 중 에러가 발생했습니다.' });
+      .json({ success: false, msg: "게시글 등록 중 에러가 발생했습니다." });
   }
 });
 
 // 게시글 삭제 API
-router.delete('/:postUid', async (req, res) => {
+router.delete("/:postUid", async (req, res) => {
   try {
     const { postUid } = req.params;
     await Post.deleteOne({ postUid });
     return res
       .status(200)
-      .json({ success: true, msg: '성공적으로 게시글이 삭제되었습니다.' });
+      .json({ success: true, msg: "성공적으로 게시글이 삭제되었습니다." });
   } catch (err) {
-    console.log('게시글 삭제 기능 중 발생한 에러: ', err);
+    console.log("게시글 삭제 기능 중 발생한 에러: ", err);
     return res
       .status(500)
-      .json({ success: false, msg: '게시글 삭제 중 에러가 발생했습니다.' });
+      .json({ success: false, msg: "게시글 삭제 중 에러가 발생했습니다." });
   }
 });
 

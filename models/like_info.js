@@ -15,7 +15,7 @@ const likeSchema = new Schema({
   },
   likeState: {
     type: Number,
-    default: 0,
+    default: 1,
     required: true,
     unique: false,
   },
