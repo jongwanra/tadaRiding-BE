@@ -72,11 +72,6 @@ const postSchema = new Schema({
     required: true,
     unique: false,
   },
-  likeState: {
-    type: Boolean,
-    required: true,
-    unique: false,
-  },
 });
 
 module.exports = mongoose.model('Post', postSchema);
