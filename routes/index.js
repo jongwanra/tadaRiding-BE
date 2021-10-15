@@ -52,26 +52,43 @@ router.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 router.get('/', auth.justCheckAuth, async (req, res) => {
   try {
     const user = req.user;
-    const tmpPosts = await Post.find({}, { _id: false, __v: false });
-    const posts = tmpPosts.toObject();
+    const posts = await Post.find({}, { _id: false, __v: false });
 
-    console.log('posts:', posts);
     // 유저가 로그인 한 경우
     if (user) {
-      const pressedPosts = await Like.find(
+      // 로그인 유저가 좋아요 누른 포스트 아이디를 가져온다.
+      const tmpPressedPosts = await Like.find(
         { userUid: user.userUid, likeState: 1 },
         { _id: false, userUid: false, likeState: false, __v: false }
       );
 
-      for (let post of posts) {
-        if (pressedPosts.includes(post.postUid)) {
-          post.likeState = true;
+      // 포스트를 배열로 이쁘게 가공
+      const pressedPosts = [];
+      for (let idx in tmpPressedPosts) {
+        pressedPosts.push(tmpPressedPosts[idx].postUid);
+      }
+
+      // post 반복문
+      for (let idx in posts) {
+        let tmpPost = posts[idx].toObject();
+
+        // 포스트들 중에 좋아요 누른 것들에 대해서 라이크 상태 변경
+        if (pressedPosts.includes(tmpPost.postUid)) {
+          posts[idx].likeState = true;
+        } else {
+          posts[idx].likeState = false;
         }
       }
 
       return res.status(200).json({ success: true, posts, user });
     }
     // 유저가 로그인을 안 한 경우
+
+    // post 반복문
+    for (let idx in posts) {
+      let tmpPost = posts[idx].toObject();
+      posts[idx].likeState = false;
+    }
     return res.status(200).json({ success: true, posts, user });
   } catch (err) {
     console.log('게시글 불러오기 중, 예상치 못하게 발생한 에러:', err);
@@ -93,7 +110,7 @@ router.get('/posts/:postUid', auth.justCheckAuth, async (req, res, next) => {
       user = req.user;
       const userUid = req.user.userUid;
       // 로그인한 유저가 해당 게시글에 좋아요를 눌렀는지를 살펴보기
-      const likeData = await Like.findOne({ userUid, postUid });
+      const likeData = await Like.findOne({ userUid, likeState: 1 });
       // DB에 존재하다면, 해당 값으로 likeState 업데이트
       if (likeData) {
         likeState = likeData.likeState;
