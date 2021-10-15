@@ -31,11 +31,11 @@ const userSchema = new Schema({
     required: true,
     unique: false,
   },
-
-  participatedPost: {
+//참가한 포스트들
+  attendPostUids: [{
     type: Array,
     required: true,
-  },
+  }],
 });
 
 module.exports = mongoose.model("User", userSchema);

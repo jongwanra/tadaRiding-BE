@@ -66,12 +66,16 @@ const postSchema = new Schema({
     required: true,
     unique: false,
   },
-
   attendUserNicknames: {
     type: Array,
     required: true,
     unique: false,
   },
+  postAttendCnt: {
+    type: Num,
+    required: true,
+    unique: false,
+  }
 });
 
 module.exports = mongoose.model('Post', postSchema);
