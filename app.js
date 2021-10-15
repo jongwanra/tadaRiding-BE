@@ -4,9 +4,11 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const compression = require('compression');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const app = express();
+app.use(compression()); // 요청받은 내용들 압축해서 파일 용량 줄이기
 
 //CORS
 const cors = require('cors');
@@ -37,8 +39,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
