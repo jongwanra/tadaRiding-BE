@@ -58,8 +58,8 @@ router.get('/', auth.justCheckAuth, async (req, res) => {
     if (user) {
       // 로그인 유저가 좋아요 누른 포스트 아이디를 가져온다.
       const tmpPressedPosts = await Like.find(
-        { userUid: user.userUid, likeState: 1 },
-        { _id: false, userUid: false, likeState: false, __v: false }
+        { userUid: user.userUid },
+        { _id: false, userUid: false, __v: false }
       );
 
       // 포스트를 배열로 이쁘게 가공
@@ -79,7 +79,6 @@ router.get('/', auth.justCheckAuth, async (req, res) => {
           posts[idx].likeState = false;
         }
       }
-      console.log(posts);
       return res.status(200).json({ success: true, posts, user });
     }
     // 유저가 로그인을 안 한 경우

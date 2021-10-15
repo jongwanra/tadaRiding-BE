@@ -4,40 +4,42 @@ const Like = require('../models/like_info');
 const Post = require('../models/post_info');
 const auth = require('../middlewares/auth');
 
+// 해당 게시물 좋아요 추가 기능
 router.post('/:postUid', auth.isAuth, async (req, res) => {
+  const { postUid } = req.params;
+  const userUid = req.user.userUid;
   try {
-    const { postUid } = req.params;
-    const userUid = req.user.userUid;
+    await Like.create({ userUid, postUid });
+    const post = await Post.findOne({ postUid }, { _id: false }); // 게시물 카운터
+    const postLikeCnt = post.postLikeCnt + 1;
 
-    // 로그인한 유저가 해당 게시글을 눌렀던 적이 있는지 확인
-    const likeData = await Like.findOne({ userUid, postUid });
-    const { postLikeCnt } = await Post.findOne({ postUid });
-
-    // 눌렀던 적이 없는 경우
-    if (!likeData) {
-      // 새로운 테이블 생성
-      const likeState = true;
-      await Like.create({ userUid, postUid, likeState });
-      await Post.findOneAndUpdate(postUid, {
-        $set: { postLikeCnt: postLikeCnt + 1 },
-      });
-    } else {
-      // 눌렀던 적이 있는 경우, 토글
-      if (likeData.likeState === 1) {
-        await Like.findOneAndUpdate({ userUid, postUid, likeState: false });
-        await Post.findOneAndUpdate(postUid, {
-          $set: { postLikeCnt: postLikeCnt - 1 },
-        });
-      } else {
-        await Like.findOneAndUpdate({ userUid, postUid, likeState: true });
-        await Post.findOneAndUpdate(postUid, {
-          $set: { postLikeCnt: postLikeCnt + 1 },
-        });
-      }
-    }
-    return res.status(201).json({ success: true });
+    await Post.updateOne({ postUid }, { $set: { postLikeCnt } });
+    return res
+      .status(200)
+      .json({ success: true, postLikeCnt, msg: '좋아요 추가!' });
   } catch (err) {
     console.log('좋아요 추가 기능에서 발생한 에러', err);
+    return res
+      .status(500)
+      .json({ success: false, msg: '예상치 못한 에러가 발생했습니다.' });
+  }
+});
+
+// 해당 게시물의 좋아요 취소 기능
+router.delete('/:postUid', auth.isAuth, async (req, res) => {
+  const { postUid } = req.params;
+  const userUid = req.user.userUid;
+  try {
+    await Like.deleteOne({ userUid, postUid });
+    const post = await Post.findOne({ postUid }, { _id: false });
+    const postLikeCnt = post.postLikeCnt - 1;
+
+    await Post.updateOne({ postUid }, { $set: { postLikeCnt } });
+    return res
+      .status(200)
+      .json({ success: false, postLikeCnt, msg: '좋아요 취소!' });
+  } catch (err) {
+    console.log('좋아요 취소 기능에서 발생한 에러', err);
     return res
       .status(500)
       .json({ success: false, msg: '예상치 못한 에러가 발생했습니다.' });
