@@ -7,7 +7,7 @@ const auth = require('../middlewares/auth');
 router.post('/:postUid', auth.isAuth, async (req, res) => {
   try {
 
-    const { postUid } = req.params;
+    const { postUid } = req.params; 
     const userUid = req.user.userUid;
 
     // 로그인한 유저가 해당 게시글을 눌렀던 적이 있는지 확인

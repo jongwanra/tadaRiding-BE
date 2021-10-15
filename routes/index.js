@@ -52,25 +52,27 @@ router.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 router.get('/', auth.justCheckAuth, async (req, res) => {
   try {
     const user = req.user;
-    const posts = await Post.find({}, { _id: false, __v: false });
-    let pressedPosts = [];
+    const tmpPosts = await Post.find({}, { _id: false, __v: false });
+    const posts = tmpPosts.toObject();
+
+    console.log('posts:', posts);
     // 유저가 로그인 한 경우
     if (user) {
-      const tmpPressedPosts = await Like.find(
+      const pressedPosts = await Like.find(
         { userUid: user.userUid, likeState: 1 },
         { _id: false, userUid: false, likeState: false, __v: false }
       );
-      // 조회된 정보가 1개 이상일 경우
-      if (tmpPressedPosts.length >= 1) {
-        // 배열형식으로 보내기 위한 코드
-        for (let data of tmpPressedPosts) {
-          pressedPosts.push(data.postUid);
+
+      for (let post of posts) {
+        if (pressedPosts.includes(post.postUid)) {
+          post.likeState = true;
         }
       }
-      return res.status(200).json({ success: true, posts, user, pressedPosts });
+
+      return res.status(200).json({ success: true, posts, user });
     }
     // 유저가 로그인을 안 한 경우
-    return res.status(200).json({ success: true, posts, user, pressedPosts });
+    return res.status(200).json({ success: true, posts, user });
   } catch (err) {
     console.log('게시글 불러오기 중, 예상치 못하게 발생한 에러:', err);
     return res.status(500).json({
@@ -85,7 +87,7 @@ router.get('/posts/:postUid', auth.justCheckAuth, async (req, res, next) => {
   try {
     const postUid = req.params.postUid;
     let user = [];
-    let likeState = false; 
+    let likeState = false;
     // 로그인한 유저인 경우
     if (req.user) {
       user = req.user;
@@ -93,10 +95,9 @@ router.get('/posts/:postUid', auth.justCheckAuth, async (req, res, next) => {
       // 로그인한 유저가 해당 게시글에 좋아요를 눌렀는지를 살펴보기
       const likeData = await Like.findOne({ userUid, postUid });
       // DB에 존재하다면, 해당 값으로 likeState 업데이트
-      if (likeData){
+      if (likeData) {
         likeState = likeData.likeState;
       }
-      
     }
 
     //해당 포스트의 정보를 가져온다.
@@ -107,7 +108,7 @@ router.get('/posts/:postUid', auth.justCheckAuth, async (req, res, next) => {
     // post내부 안에 likeState추가
     let post = targetPost.toObject();
     post.likeState = likeState;
-    
+
     let comments = [];
     // 가공하기 전 코멘트들
     comments = await Comment.find(

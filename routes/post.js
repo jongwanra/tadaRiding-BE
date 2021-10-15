@@ -25,9 +25,10 @@ router.post('/', auth.isAuth, async (req, res) => {
     const postRegister = req.user.userNickname;
     const postUid = uuid.v1();
     const postState = true;
+    const likeState = false;
     const attendUserNicknames = [];
     attendUserNicknames.push(postRegister);
-    console.log("attendUserNicknames: ", attendUserNicknames);
+    console.log('attendUserNicknames: ', attendUserNicknames);
     const postLikeCnt = 0;
 
     // 포스트 등록
@@ -45,8 +46,8 @@ router.post('/', auth.isAuth, async (req, res) => {
       postLikeCnt,
       startTime,
       attendUserNicknames,
+      likeState,
     });
-
 
     // 유저 정보에서 참여한 게시글 목록에 내용 추가.
     await User.updateOne(
