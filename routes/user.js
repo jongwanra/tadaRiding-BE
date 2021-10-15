@@ -104,14 +104,14 @@ router.post('/register', async (req, res) => {
     let result = await checkUserId(userId);
     // 중복된 아이디인 경우,
     if (!result['success']) {
-      return res.json(result);
+      return res.status(307).json(result);
     }
 
     // userNickname이 중복되는지 확인.
     result = await checkUserNickname(userNickname);
     // 중복된 닉네임인 경우,
     if (result['success'] != true) {
-      return res.json(result);
+      return res.status(307).json(result);
     }
 
     // 회원가입 성공 시
@@ -136,7 +136,7 @@ router.post('/register', async (req, res) => {
       .json({ success: true, msg: '성공적으로 회원 가입이 완료 되었습니다.' });
   } catch (err) {
     console.log('회원가입 기능에서 발생한 에러: ', err);
-    res.status(409).json({ success: false, msg: '회원가입에 실패하였습니다.' });
+    res.status(500).json({ success: false, msg: '회원가입에 실패하였습니다.' });
   }
 });
 // 아이디 중복 체크 함수

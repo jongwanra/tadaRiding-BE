@@ -30,11 +30,13 @@
  *             userPhoneNumber: "010-2514-0552"
  *     responses:
  *       '201':
- *         description: 회원 등록 성공!
+ *         description: 회원 등록 성공!(Created)
+ *       '307':
+ *         description: 아이디 혹은 닉네임 중복이 있을 경우 발생하는 에러(Temporary Redirect)
  *       '404':
- *         description: 경로를 찾지 못했습니다.
- *       '408':
- *         description: 아이디 혹은 닉네임 중복이 있을 경우 발생하는 에러
+ *         description: 경로를 찾지 못했습니다.(Not Found)
+ *       '500':
+ *         description: 회원가입시 발생한 예상하지 못한 에러(Internal Server Error)
  * /api/users/auth:
  *   post:
  *     tags:

@@ -67,7 +67,7 @@ const postSchema = new Schema({
     unique: false,
   },
 
-  participants: {
+  attendUserNicknames: {
     type: Array,
     required: true,
     unique: false,

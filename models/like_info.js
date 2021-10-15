@@ -13,6 +13,7 @@ const likeSchema = new Schema({
     required: true,
     unique: false,
   },
+  
   likeState: {
     type: Number,
     default: 1,

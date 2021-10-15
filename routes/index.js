@@ -57,10 +57,10 @@ router.get('/', auth.justCheckAuth, async (req, res) => {
     // 유저가 로그인 한 경우
     if (user) {
       const tmpPressedPosts = await Like.find(
-        { userUid: user.userUid },
+        { userUid: user.userUid, likeState: 1 },
         { _id: false, userUid: false, likeState: false, __v: false }
       );
-      // 조회한 정보가 1개 이상일 경우
+      // 조회된 정보가 1개 이상일 경우
       if (tmpPressedPosts.length >= 1) {
         // 배열형식으로 보내기 위한 코드
         for (let data of tmpPressedPosts) {
