@@ -25,10 +25,9 @@
  *     name: 마이 페이지
  *     summary: 마이 페이지(사용 가능)
  *     parameters:
- *       - name: postUid
+ *       - name: userUid
  *         in: path
  *         required: true
- *         default: 9d773f60-2b87-11ec-84a6-a5190298305d
  *         schema:
  *           type: string
  *     responses:
