@@ -156,11 +156,20 @@ router.get('/posts/:postUid', auth.justCheckAuth, async (req, res, next) => {
 });
 
 // 마이페이지
-router.get('/users/:userUid', auth.isAuth, (req, res, next) => {
-  if (req.user) {
+router.get('/users/:userUid', auth.isAuth, async (req, res, next) => {
+  try {
+    const { userUid } = req.params;
     // 로그인 한 유저인 경우
-    return res.status(200).json({ success: true, user: req.user });
-  } else {
+    if (req.user) {
+      // 유저가 작성한 게시글
+      const writingPosts = await Post.find({}, { _id: false, __v: false });
+      // 유저가 참여한 게시글
+      const participatedPost = await Post.find({}, { _id: false, __v: false });
+      return res
+        .status(200)
+        .json({ success: true, user: req.user, writingPosts });
+    }
+  } catch (error) {
     // 로그인 안한 유저인 경우,
     return res.status(401).json({ success: false });
   }
