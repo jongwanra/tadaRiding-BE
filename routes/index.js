@@ -116,7 +116,7 @@ router.get('/posts/:postUid', auth.justCheckAuth, async (req, res, next) => {
       user = req.user;
       const userUid = req.user.userUid;
       // 로그인한 유저가 해당 게시글에 좋아요를 눌렀는지를 살펴보기
-      const likeData = await Like.findOne({ userUid, likeState: true });
+      const likeData = await Like.findOne({ userUid, postUid });
       // DB에 존재하다면, 해당 값으로 likeState 업데이트
       if (likeData) {
         likeState = true;
