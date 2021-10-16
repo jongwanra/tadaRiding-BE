@@ -116,7 +116,7 @@ router.get('/posts/:postUid', auth.justCheckAuth, async (req, res, next) => {
       user = req.user;
       const userUid = req.user.userUid;
       // 로그인한 유저가 해당 게시글에 좋아요를 눌렀는지를 살펴보기
-      const likeData = await Like.findOne({ userUid, postUid });
+      const likeData = await Like.findOne({ userUid, likeState: true });
       // DB에 존재하다면, 해당 값으로 likeState 업데이트
       if (likeData) {
         likeState = true;
@@ -156,13 +156,32 @@ router.get('/posts/:postUid', auth.justCheckAuth, async (req, res, next) => {
 });
 
 // 마이페이지
-router.get('/users/:userUid', auth.isAuth, (req, res, next) => {
-  if (req.user) {
-    // 로그인 한 유저인 경우
-    return res.status(200).json({ success: true, user: req.user });
-  } else {
+router.get('/users/:userUid', auth.isAuth, async (req, res, next) => {
+  try {
+    const targetUser = req.user;
+    const userNickname = targetUser.userNickname;
+    const participatedPost = targetUser.participatedPost;
+    const writingPosts = [];
+    const enteredPosts = [];
+    // console.log(userNickname, participatedPost);
+    for (const [key, value] of Object.entries(participatedPost)) {
+      const temp = await Post.findOne({ postUid: value });
+      console.log(temp.postRegister);
+      if (userNickname === temp.postRegister) {
+        writingPosts.push(temp);
+      } else {
+        enteredPosts.push(temp);
+      }
+    }
+    return res
+      .status(200)
+      .json({ success: true, user: req.user, writingPosts, enteredPosts });
+  } catch (error) {
     // 로그인 안한 유저인 경우,
-    return res.status(401).json({ success: false });
+    console.log('마이페이지에서 발생한 에러: ', error);
+    return res
+      .status(500)
+      .json({ success: false, msg: '예측할 수 없는 에러가 발생했습니다.' });
   }
 });
 
