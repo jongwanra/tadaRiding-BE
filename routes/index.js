@@ -68,27 +68,34 @@ router.get('/', auth.justCheckAuth, async (req, res) => {
         pressedPosts.push(tmpPressedPosts[idx].postUid);
       }
 
+      const tmpPosts = [];
       // post 반복문
       for (let idx in posts) {
         let tmpPost = posts[idx].toObject();
 
         // 포스트들 중에 좋아요 누른 것들에 대해서 라이크 상태 변경
         if (pressedPosts.includes(tmpPost.postUid)) {
-          posts[idx].likeState = true;
+          tmpPost.likeState = true;
         } else {
-          posts[idx].likeState = false;
+          tmpPost.likeState = false;
         }
+
+        tmpPosts.push(tmpPost);
       }
-      return res.status(200).json({ success: true, posts, user });
+      return res.status(200).json({ success: true, posts: tmpPosts, user });
     }
     // 유저가 로그인을 안 한 경우
 
     // post 반복문
+    const tmpPosts = [];
+    // post 반복문
     for (let idx in posts) {
-      posts[idx].likeState = false;
+      let tmpPost = posts[idx].toObject();
+      tmpPost.likeState = false;
+      tmpPosts.push(tmpPost);
     }
 
-    return res.status(200).json({ success: true, posts, user });
+    return res.status(200).json({ success: true, posts: tmpPosts, user });
   } catch (err) {
     console.log('게시글 불러오기 중, 예상치 못하게 발생한 에러:', err);
     return res.status(500).json({
@@ -112,7 +119,7 @@ router.get('/posts/:postUid', auth.justCheckAuth, async (req, res, next) => {
       const likeData = await Like.findOne({ userUid, likeState: true });
       // DB에 존재하다면, 해당 값으로 likeState 업데이트
       if (likeData) {
-        likeState = likeData.likeState;
+        likeState = true;
       }
     }
 
@@ -131,6 +138,8 @@ router.get('/posts/:postUid', auth.justCheckAuth, async (req, res, next) => {
       { postUid },
       { _id: false, __v: false, postUid: false }
     );
+
+    console.log('상세페이지:', post);
     return res.status(200).json({
       success: true,
       post,

@@ -25,19 +25,25 @@ router.post('/:postUid', auth.isAuth, async (req, res) => {
   }
 });
 
-// 해당 게시물의 좋아요 취소 기능
+//좋아요 취소 기능
 router.delete('/:postUid', auth.isAuth, async (req, res) => {
   const { postUid } = req.params;
   const userUid = req.user.userUid;
   try {
     await Like.deleteOne({ userUid, postUid });
     const post = await Post.findOne({ postUid }, { _id: false });
+    // likeCnt가 0인 경우, 내보내기
+    if (post.postLikeCnt == 0) {
+      return res
+        .status(200)
+        .json({ success: false, postLikeCnt, msg: '잘못된 접근!' });
+    }
     const postLikeCnt = post.postLikeCnt - 1;
 
     await Post.updateOne({ postUid }, { $set: { postLikeCnt } });
     return res
       .status(200)
-      .json({ success: false, postLikeCnt, msg: '좋아요 취소!' });
+      .json({ success: true, postLikeCnt, msg: '좋아요 취소!' });
   } catch (err) {
     console.log('좋아요 취소 기능에서 발생한 에러', err);
     return res
