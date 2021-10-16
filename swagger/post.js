@@ -171,10 +171,10 @@
  *         required: true
  *         default: c62486c0-2e1b-11ec-a594-b95412bcee5e
  *         schema:
- *           type: object
+ *           type: string
  *     responses:
  *       '200':
- *         description: 게시글 수정 완료.
+ *         description: 참여하기 취소 완료.
  *       '404':
  *         description: 해당 경로를 찾을 수 없음.
  *       '500':
