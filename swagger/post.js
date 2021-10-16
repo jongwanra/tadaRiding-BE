@@ -117,10 +117,67 @@
  *             limitedUserNum: 4
  *             startTime: "08:00"
  *     responses:
- *       '201':
+ *       '200':
  *         description: 게시글 수정 완료.
  *       '404':
  *         description: 해당 경로를 찾을 수 없음.
  *       '500':
  *         description: 예상하지 못한 에러 발생
+ * /api/posts/{postUid}/{userUid}:
+ *   post:
+ *     security:
+ *      - bearerAuth: []
+ *     tags:
+ *      - Post
+ *     summary: 참여하기 기능
+ *     parameters:
+ *       - name: postUid
+ *         in: path
+ *         default: 3e8fbc20-2e3e-11ec-a95b-69c7ce26350c
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: 해당 게시글 고유 아이디
+ *       - name: userUid
+ *         in: path
+ *         default: 925d4980-2e3e-11ec-a95b-69c7ce26350c
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: 해당 포스트에 참가 완료.
+ *       '404':
+ *         description: 해당 경로를 찾을 수 없음.
+ *       '500':
+ *         description: 예상하지 못한 에러 발생
+ *   delete:
+ *     security:
+ *      - bearerAuth: []
+ *     tags:
+ *      - Post
+ *     name: 참여하기 취소
+ *     summary: 참여하기 취소
+ *     parameters:
+ *       - name: postUid
+ *         in: path
+ *         default: 3e8fbc20-2e3e-11ec-a95b-69c7ce26350c
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: 해당 게시글 고유 아이디
+ *       - name: userUid
+ *         in: path
+ *         required: true
+ *         default: c62486c0-2e1b-11ec-a594-b95412bcee5e
+ *         schema:
+ *           type: object
+ *     responses:
+ *       '200':
+ *         description: 게시글 수정 완료.
+ *       '404':
+ *         description: 해당 경로를 찾을 수 없음.
+ *       '500':
+ *         description: 예상하지 못한 에러 발생
+
  */
