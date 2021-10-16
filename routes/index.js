@@ -138,7 +138,6 @@ router.get('/posts/:postUid', auth.justCheckAuth, async (req, res, next) => {
       { postUid },
       { _id: false, __v: false, postUid: false }
     );
-
     console.log('상세페이지:', post);
     return res.status(200).json({
       success: true,
