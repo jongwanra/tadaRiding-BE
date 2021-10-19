@@ -6,6 +6,7 @@ const isAuth = async (req, res, next) => {
   const authHeader = req.get("Authorization");
 
   if (!(authHeader && authHeader.startsWith("Bearer"))) {
+    
     // 로그인 안했을 경우 들어와 짐.
     return res
       .status(401)

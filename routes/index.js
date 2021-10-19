@@ -52,7 +52,10 @@ router.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 router.get('/', auth.justCheckAuth, async (req, res) => {
   try {
     const user = req.user;
-    const posts = await Post.find({}, { _id: false, __v: false });
+    const posts = await Post.find(
+      {},
+      { _id: false, __v: false, postImage: false }
+    );
 
     // 유저가 로그인 한 경우
     if (user) {

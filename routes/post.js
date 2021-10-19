@@ -28,7 +28,6 @@ router.post('/', auth.isAuth, async (req, res) => {
     const likeState = false;
     const attendUserNicknames = [];
     attendUserNicknames.push(postRegister);
-    console.log('attendUserNicknames: ', attendUserNicknames);
     const postLikeCnt = 0;
 
     // 포스트 등록
